@@ -17,14 +17,12 @@ public class Host extends Thread {
     }
 
     private void isAdd() {
-        synchronized (Apartment.apartmentLock) {
             int sizeList = hostList.size() - 1;
             Apartment.apartmentList.add(hostList.get(sizeList));
             System.out.println(Thread.currentThread().getName() + " выложил " +
                     hostList.get(sizeList).getName() + " весом " + hostList.get(sizeList).getWeight()
                     + "кг и ценой " + hostList.get(sizeList).getPrice() + "р. в квартиру");
             hostList.remove(hostList.get(sizeList));
-        }
     }
 }
 

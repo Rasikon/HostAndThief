@@ -46,7 +46,7 @@ class Backpack {
         }
     }
 
-    synchronized void bustAllSet(List<Subject> subjects) {
+    void bustAllSet(List<Subject> subjects) {
         if (subjects.size() > 0) {
             checkSet(subjects);
         }

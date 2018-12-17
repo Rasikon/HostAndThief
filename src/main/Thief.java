@@ -12,11 +12,13 @@ public class Thief extends Thread {
 
     @Override
     public void run() {
-        synchronized (Apartment.apartmentLock) {
+        synchronized (Thief.class) {
             backpack.bustAllSet(apartmentList);
-            for (int i = 0; i < backpack.getBackpackList().size(); i++) {
-                System.out.println(Thread.currentThread().getName() + " забрал" + backpack.getBackpackList().get(i));
-                apartmentList.remove(backpack.getBackpackList().get(i));
+            if(backpack.getBackpackList()!= null) {
+                for (int i = 0; i < backpack.getBackpackList().size(); i++) {
+                    System.out.println(Thread.currentThread().getName() + " забрал" + backpack.getBackpackList().get(i));
+                    apartmentList.remove(backpack.getBackpackList().get(i));
+                }
             }
         }
     }
