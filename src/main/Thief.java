@@ -1,23 +1,22 @@
 package main;
 
-import java.util.List;
+import static main.Apartment.apartmentList;
 
 public class Thief extends Thread {
-    public Backpack backpack;
-    public List<Subject> apartmentList;
+    private Backpack backpack;
 
-    public Thief(List<Subject> apartmentList,Backpack backpack){
-        this.apartmentList = apartmentList;
+    Thief(Backpack backpack) {
         this.backpack = backpack;
 
     }
 
     @Override
     public void run() {
-        synchronized (Apartment.apartment) {
+        synchronized (Apartment.apartmentLock) {
             backpack.bustAllSet(apartmentList);
             for (int i = 0; i < backpack.getBackpackList().size(); i++) {
                 System.out.println(Thread.currentThread().getName() + " забрал" + backpack.getBackpackList().get(i));
+                apartmentList.remove(backpack.getBackpackList().get(i));
             }
         }
     }

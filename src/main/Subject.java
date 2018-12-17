@@ -1,34 +1,34 @@
 package main;
 
 public class Subject {
-    public String name;
-    public int weight;
-    public int price;
+    private String name;
+    int weight;
+    int price;
 
-    public Subject(String name, int weight, int price) {
+    Subject(String name, int weight, int price) {
         this.name = name;
         this.weight = weight;
         this.price = price;
     }
 
-    public String getName() {
+    String getName() {
         return name;
     }
 
-    public int getWeight() {
+    int getWeight() {
         return weight;
     }
 
-    public int getPrice() {
+    int getPrice() {
         return price;
     }
 
 
     @Override
     public String toString() {
-        return    " " + name + ' ' +
+        return " " + name + ' ' +
                 " весом " + weight +
-                "кг и ценой " + price +"р";
+                "кг и ценой " + price + "р";
 
     }
 }
