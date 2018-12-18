@@ -10,32 +10,11 @@ import java.util.List;
 
 public class Apartment {
     static List<Subject> apartmentList;
-    public static final Object apartmentLock = new Object();
-
+    public static boolean Lock = false;
+    public static List<Host> listHost = new ArrayList<>();
+    public static List<Thief> listThief = new ArrayList<>();
     public static void main(String[] args) throws InterruptedException, IOException {
         apartmentList = Collections.synchronizedList(new ArrayList<>());
-        System.out.println("Введите количество хозяинов");
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        int hosts = Integer.parseInt(reader.readLine());
-        System.out.println(hosts);
-        System.out.println("Введите количество воров");
-        int thiefs=Integer.parseInt(reader.readLine());
-        System.out.println(thiefs);
-        for(int i =0; i < thiefs; i++) {
-            System.out.println("Дайте имя хозяину");
-            String name = reader.readLine();
-            System.out.println("Введите количество вещей");
-            int quantity = Integer.parseInt(reader.readLine());
-            for(int i=0;i<quantity;i++) {
-                System.out.println("Введите вещи их вес и цену");
-                String itemName = reader.readLine();
-                int weight = Integer.parseInt(reader.readLine());
-                int price = Integer.parseInt(reader.readLine());
-            }
-        }
-
-
-
         List<Subject> hostList = new ArrayList<>();
         hostList.add(new Subject("Конфеты", 10, 100));
         hostList.add(new Subject("Спички", 8, 60));
@@ -46,10 +25,6 @@ public class Apartment {
         hostList2.add(new Subject("Компьютер", 8, 60));
         hostList2.add(new Subject("Редиску", 10, 300));
         hostList2.add(new Subject("Сосиску", 15, 90));
-        Host host1 = new Host(hostList);
-        host1.setName("Хозяин Василий");
-        Host host2 = new Host(hostList2);
-        host2.setName("Хозяин Виктор");
         Thief thief = new Thief(new Backpack(10));
         thief.setName("Вор Анатолий");
         Thief thief2 = new Thief(new Backpack(40));
@@ -59,14 +34,32 @@ public class Apartment {
         hostList3.add(new Subject("Ноутбук", 15, 150));
         hostList3.add(new Subject("Стол", 10, 100));
         hostList3.add(new Subject("Стул", 15, 80));
+        Host host1 = new Host(hostList);
+        host1.setName("Хозяин Василий");
+        Host host2 = new Host(hostList2);
+        host2.setName("Хозяин Виктор");
         Host host3 = new Host(hostList3);
         host3.setName("Хозяин Григорий");
-        host1.start();
-        host2.start();
-        host1.join();
-        host2.join();
-        thief.start();
-        thief2.start();
+        listHost.add(host1);
+        listHost.add(host2);
+        listHost.add(host3);
+        for(Host host:listHost){
+            host.start();
+        }
+        for(Host host:listHost){
+            host.join();
+        }
+        Apartment.Lock =true;
+        listThief.add(thief);
+        listThief.add(thief2);
+        for(Thief thiefs:listThief){
+            thiefs.start();
+        }
+
+
+
+
+
 
     }
 }

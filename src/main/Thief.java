@@ -12,6 +12,12 @@ public class Thief extends Thread {
 
     @Override
     public void run() {
+        if (Apartment.Lock) {
+            getList();
+        }
+    }
+
+    public void getList(){
         synchronized (Thief.class) {
             backpack.bustAllSet(apartmentList);
             if(backpack.getBackpackList()!= null) {
