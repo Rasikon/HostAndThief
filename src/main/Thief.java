@@ -33,21 +33,20 @@ public class Thief extends Thread {
 
     @Override
     public void run() {
-            if (Apartment.isClose()) {
-                Apartment.threadList.add("Thief");
+            while (Apartment.apartmentList.size()>0 && !Apartment.Bool) {
+//                Apartment.threadList.add("Thief");
                 addBackpackThief();
             }
-        Apartment.threadList.remove("Thief");
+//        Apartment.threadList.remove("Thief");
     }
 
-    private void addBackpackThief() {
-        synchronized (Thief.class) {
-            for (int i = Apartment.apartmentList.size() - 1; i >= 0; i--) {
-                addItem(Apartment.apartmentList.get(i));
-//                System.out.println(Thread.currentThread().getName() + " забрал из комнаты " + this.getBackpackThief().get(i).getName() +
-//                        " стоимостью " + this.getBackpackThief().get(i).getPrice() + " и весом " + this.getBackpackThief().get(i).getWeight());
-                Apartment.apartmentList.remove(i);
-            }
+    private synchronized void addBackpackThief() {
+             int size = Apartment.apartmentList.size() - 1;
+                addItem(Apartment.apartmentList.get(size));
+                System.out.println(Thread.currentThread().getName() + " забрал из комнаты " + Apartment.apartmentList.get(size).getName() +
+                        " стоимостью " + Apartment.apartmentList.get(size).getPrice() + " и весом " + Apartment.apartmentList.get(size).getWeight());
+                Apartment.apartmentList.remove(size);
+//            System.out.println(getBackpackThief());
         }
+
     }
-}

@@ -10,8 +10,10 @@ public class Apartment {
     private static Apartment instance = new Apartment();
     public List<Host> hostList = new ArrayList<>();
     public List<Thief> thiefList = new ArrayList<>();
-    public static List<String> threadList = Collections.synchronizedList(new CopyOnWriteArrayList<String>());
+    public static List<String> threadList = new ArrayList<>();
     public static List<Item> apartmentList = Collections.synchronizedList(new ArrayList<>());
+    public static boolean Bool;
+
     public static Apartment getInstance() {
         return instance;
     }
@@ -64,12 +66,13 @@ public class Apartment {
     }
 
     public void startThread(){
-        for(Host host:hostList){
+        for(Host host:hostList) {
             host.start();
+        }
         for(Thief thief:thiefList){
             thief.start();
         }
-        }
+
     }
 }
 

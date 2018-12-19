@@ -19,19 +19,23 @@ public class Host extends Thread {
 
     @Override
     public void run() {
-            if (Apartment.isOpen()) {
-                Apartment.threadList.add("Host");
-                addApartmentList();
-            }
-        Apartment.threadList.remove("Host");
+//            if (Apartment.isOpen()) {
+//                Apartment.threadList.add("Host");
+        while (!Apartment.Bool) {
+            addApartmentList();
+        }
+
     }
+//        Apartment.threadList.remove("Host");
+//    }
 
     private void addApartmentList() {
-        for (int i = this.getBackpackList().size() - 1; i >= 0; i--) {
-            Apartment.apartmentList.add(this.getBackpackList().get(i));
-            System.out.println(Thread.currentThread().getName() + " выложил в комнату " + this.getBackpackList().get(i).getName() +
-                    " стоимостью " + this.getBackpackList().get(i).getPrice() + " и весом " + this.getBackpackList().get(i).getWeight());
-            this.getBackpackList().remove(this.getBackpackList().get(i));
-        }
+        int size = this.getBackpackList().size()-1;
+            Apartment.apartmentList.add(this.getBackpackList().get(size));
+            System.out.println(Thread.currentThread().getName() + " выложил в комнату " + this.getBackpackList().get(size).getName() +
+                    " стоимостью " + this.getBackpackList().get(size).getPrice() + " и весом " + this.getBackpackList().get(size).getWeight());
+            this.getBackpackList().remove(this.getBackpackList().get(size));
+
+
 }
 }
