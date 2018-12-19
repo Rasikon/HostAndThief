@@ -1,30 +1,37 @@
-package main;
-
 import java.util.List;
 
 public class Host extends Thread {
-    private List<Subject> hostList;
-    int indexList = 0;
-    Host(List<Subject> hostList) {
-        super();
-        this.hostList = hostList;
+    private Backpack backpackHost;
+
+    public Host(String name,Backpack backpackHost){
+        this.setName(name);
+        this.backpackHost =backpackHost;
+    }
+
+
+    public List<Item> getBackpackList() {
+        return backpackHost.getItems();
+    }
+
+    public void addItem(Item item){
+        backpackHost.setItems(item);
     }
 
     @Override
     public void run() {
-        while (!Apartment.Lock && indexList<hostList.size()) {
-                isAdd();
+            if (Apartment.isOpen()) {
+                Apartment.threadList.add("Host");
+                addApartmentList();
+            }
+        Apartment.threadList.remove("Host");
+    }
+
+    private void addApartmentList() {
+        for (int i = this.getBackpackList().size() - 1; i >= 0; i--) {
+            Apartment.apartmentList.add(this.getBackpackList().get(i));
+            System.out.println(Thread.currentThread().getName() + " выложил в комнату " + this.getBackpackList().get(i).getName() +
+                    " стоимостью " + this.getBackpackList().get(i).getPrice() + " и весом " + this.getBackpackList().get(i).getWeight());
+            this.getBackpackList().remove(this.getBackpackList().get(i));
         }
-        hostList.clear();
-    }
-
-    private void isAdd() {
-            Apartment.apartmentList.add(hostList.get(indexList));
-            System.out.println(Thread.currentThread().getName() + " выложил " +
-                    hostList.get(indexList).getName() + " весом " + hostList.get(indexList).getWeight()
-                    + "кг и ценой " + hostList.get(indexList).getPrice() + "р. в квартиру");
-            indexList++;
-    }
 }
-
-
+}

@@ -1,65 +1,75 @@
-package main;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Apartment {
-    static List<Subject> apartmentList;
-    public static boolean Lock = false;
-    public static List<Host> listHost = new ArrayList<>();
-    public static List<Thief> listThief = new ArrayList<>();
-    public static void main(String[] args) throws InterruptedException, IOException {
-        apartmentList = Collections.synchronizedList(new ArrayList<>());
-        List<Subject> hostList = new ArrayList<>();
-        hostList.add(new Subject("Конфеты", 10, 100));
-        hostList.add(new Subject("Спички", 8, 60));
-        hostList.add(new Subject("Окорок", 10, 50));
-        hostList.add(new Subject("Кошелек", 15, 90));
-        List<Subject> hostList2 = new ArrayList<>();
-        hostList2.add(new Subject("Шоколад", 10, 200));
-        hostList2.add(new Subject("Компьютер", 8, 60));
-        hostList2.add(new Subject("Редиску", 10, 300));
-        hostList2.add(new Subject("Сосиску", 15, 90));
-        Thief thief = new Thief(new Backpack(10));
-        thief.setName("Вор Анатолий");
-        Thief thief2 = new Thief(new Backpack(40));
-        thief2.setName("Вор Андрей");
-        List<Subject> hostList3 = new ArrayList<>();
-        hostList3.add(new Subject("Булка", 20, 500));
-        hostList3.add(new Subject("Ноутбук", 15, 150));
-        hostList3.add(new Subject("Стол", 10, 100));
-        hostList3.add(new Subject("Стул", 15, 80));
-        Host host1 = new Host(hostList);
-        host1.setName("Хозяин Василий");
-        Host host2 = new Host(hostList2);
-        host2.setName("Хозяин Виктор");
-        Host host3 = new Host(hostList3);
-        host3.setName("Хозяин Григорий");
-        listHost.add(host1);
-        listHost.add(host2);
-        listHost.add(host3);
-        for(Host host:listHost){
-            host.start();
-        }
-        for(Host host:listHost){
-            host.join();
-        }
-        Apartment.Lock =true;
-        listThief.add(thief);
-        listThief.add(thief2);
-        for(Thief thiefs:listThief){
-            thiefs.start();
-        }
+    private static Apartment instance = new Apartment();
+    public List<Host> hostList = new ArrayList<>();
+    public List<Thief> thiefList = new ArrayList<>();
+    public static List<String> threadList = Collections.synchronizedList(new CopyOnWriteArrayList<String>());
+    public static List<Item> apartmentList = Collections.synchronizedList(new ArrayList<>());
+    public static Apartment getInstance() {
+        return instance;
+    }
 
 
-
-
-
+    private Apartment() {
 
     }
+
+
+    public static boolean isOpen() {
+        for (String string : threadList) {
+            if(string.contains("Thief")){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isClose() {
+        for (String string : threadList) {
+            if ((string.contains("Thief"))|| (string.contains("Host"))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void hostInit(int host) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        for (int i = 0; i < host; i++) {
+            System.out.println("Введите имя хозяина");
+            String name = reader.readLine();
+            System.out.println("Введите количество вещей");
+            int allItems = Integer.parseInt(reader.readLine());
+            hostList.add(new Host(name,new Backpack()));
+            for (int j = 0; j < allItems; j++) {
+                hostList.get(i).addItem(new Item(Main.nameItem[(int) (Math.random() * 11)], Main.weightItem[(int) (Math.random() * 11)], Main.priceItem[(int) (Math.random() * 11)]));
+            }
+        }
+    }
+
+    public void thiefInit(int thief) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        for (int i = 0; i < thief; i++) {
+            System.out.println("Введите имя вора");
+            String name = reader.readLine();
+            thiefList.add(new Thief(name, Main.sizeBackpack[(int) (Math.random() * 9)]));
+        }
+    }
+
+    public void startThread(){
+        for(Host host:hostList){
+            host.start();
+        for(Thief thief:thiefList){
+            thief.start();
+        }
+        }
+    }
 }
+
