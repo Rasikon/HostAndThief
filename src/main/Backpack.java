@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Backpack {
-    private List<Item> items =new ArrayList<>();
+    private List<Item> items = new ArrayList<>();
 
 
     public List<Item> getItems() {

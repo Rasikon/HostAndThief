@@ -8,13 +8,12 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Apartment {
     private static Apartment instance = new Apartment();
-    public List<Host> hostList = new ArrayList<>();
-    public List<Thief> thiefList = new ArrayList<>();
-    public static List<String> threadList = new ArrayList<>();
-    public static List<Item> apartmentList = Collections.synchronizedList(new ArrayList<>());
-    public static boolean Bool;
-
-    public static Apartment getInstance() {
+    private List<Host> hostList = new ArrayList<>();
+    private List<Thief> thiefList = new ArrayList<>();
+    static List<Item> apartmentList = Collections.synchronizedList(new ArrayList<>());
+    static List<String> threadList = Collections.synchronizedList(new ArrayList<>());
+    static boolean joy = false;
+    static Apartment getInstance() {
         return instance;
     }
 
@@ -24,23 +23,6 @@ public class Apartment {
     }
 
 
-    public static boolean isOpen() {
-        for (String string : threadList) {
-            if(string.contains("Thief")){
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public static boolean isClose() {
-        for (String string : threadList) {
-            if ((string.contains("Thief"))|| (string.contains("Host"))) {
-                return false;
-            }
-        }
-        return true;
-    }
 
     public void hostInit(int host) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -61,7 +43,9 @@ public class Apartment {
         for (int i = 0; i < thief; i++) {
             System.out.println("Введите имя вора");
             String name = reader.readLine();
-            thiefList.add(new Thief(name, Main.sizeBackpack[(int) (Math.random() * 9)]));
+            System.out.println("Введите максимальный вес рюкзака");
+            int max = Integer.parseInt(reader.readLine());
+            thiefList.add(new Thief(name,max));
         }
     }
 
@@ -72,7 +56,9 @@ public class Apartment {
         for(Thief thief:thiefList){
             thief.start();
         }
+        }
 
     }
-}
+
+
 

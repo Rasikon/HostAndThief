@@ -1,10 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-
-import static java.lang.Math.random;
 
 public class Main {
     static String[] nameItem = {"Капуста", "Картофель", "Морковь", "Сосиска", "Спички", "Колбаса", "Стол", "Стул", "Холодильник", "Телевизор", "Тетрадь"};
