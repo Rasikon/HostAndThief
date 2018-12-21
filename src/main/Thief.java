@@ -2,80 +2,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Thief extends Thread {
-    private Backpack backpackThief;
+    private List<Item> backpackThief = new ArrayList<>();
     private int maxMass;
-    private int bestPrice;
-    private List<Item> bestItem = new ArrayList<>();
 
-    public Thief(String name, int maxMass) {
-        this.setName(name);
+    public Thief(int name, int maxMass) {
+        this.setName(String.valueOf(name));
         this.maxMass = maxMass;
-        this.backpackThief = new Backpack();
     }
 
     public List<Item> getBackpackThief() {
-        return backpackThief.getItems();
+        return backpackThief;
     }
-
 
     @Override
     public void run() {
+        try {
+            Apartment.host.await();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         addBackpackThief();
         System.out.println(getBackpackThief());
     }
 
-    private synchronized void addBackpackThief() {
-        while (!Apartment.joy) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+    private void addBackpackThief() {
         synchronized (Thief.class) {
-            for (int i = 0; i < Apartment.apartmentList.size() - 1; i++) {
-                if (Apartment.apartmentList.get(i).getWeight() > 20) {
-                    getBackpackThief().add(Apartment.apartmentList.get(i));
-                    System.out.println(Thread.currentThread().getName() + " забрал из комнаты " + Apartment.apartmentList.get(i).getName() +
-                            " стоимостью " + Apartment.apartmentList.get(i).getPrice() + " и весом " + Apartment.apartmentList.get(i).getWeight());
-                    Apartment.apartmentList.remove(Apartment.apartmentList.get(i));
-                }
+            for(int i =0;i<10;i++) {
+//                for (int i = Apartment.getApartmentList().size() - 1; i >= 0; i++) {
+                        getBackpackThief().add(Apartment.getApartmentList().get(i));
+                        Apartment.delList(Apartment.getApartmentList().get(i));
+                        System.out.println(Thread.currentThread().getName() +
+                                " забрал из комнаты " + Apartment.getApartmentList().get(i).getName() +
+                                " стоимостью " + Apartment.getApartmentList().get(i).getPrice() +
+                                " и весом " + Apartment.getApartmentList().get(i).getWeight());
+
+//                }
             }
         }
     }
 
-
 }
-
-//    private void checkSet(List<Item> items) {
-//        int sumM = 0;
-//        int sumP = 0;
-//        for(Item item:items){
-//            sumM += item.getWeight();
-//            sumP += item.getPrice();
-//        }
-//        if (backpackThief == null) {
-//            if (sumM <= maxMass) {
-//                getBackpackThief().addAll(items);
-//                bestPrice = sumP;
-//            }
-//        } else {
-//            if (sumM <= maxMass && sumP > bestPrice) {
-//                getBackpackThief().addAll(items);
-//                bestPrice = sumP;
-//            }
-//        }
-//    }
-
-//     private synchronized  void  bustAllSet(List<Item> items) {
-//        if(items.size()>0){
-//            checkSet(items);
-//        }
-//        for(int i=0;i<items.size();i++){
-//            List<Item> newItem = new ArrayList<>(items);
-//            newItem.remove(i);
-//            bustAllSet(newItem);
-//        }
-//    }
-
 

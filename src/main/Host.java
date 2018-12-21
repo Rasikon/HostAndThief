@@ -1,42 +1,40 @@
 import java.util.List;
 
 public class Host extends Thread {
-    private Backpack backpackHost;
+    private List<Item> backpackHost;
 
-    public Host(String name, Backpack backpackHost) {
-        this.setName(name);
+    public Host(int name, List<Item> backpackHost) {
+        this.setName(String.valueOf(name));
         this.backpackHost = backpackHost;
     }
 
-
-    public List<Item> getBackpackList() {
-        return backpackHost.getItems();
+    public List<Item> getBackpackHost() {
+        return backpackHost;
     }
 
     public void addItem(Item item) {
-        backpackHost.setItems(item);
+        backpackHost.add(item);
     }
 
     @Override
     public void run() {
-        notifyJob();
         addApartmentList();
-
+        Apartment.host.countDown();
     }
 
-    private synchronized void addApartmentList() {
-        for (int i = this.getBackpackList().size() - 1; i >= 0; i--) {
-            Apartment.apartmentList.add(this.getBackpackList().get(i));
-            System.out.println(Thread.currentThread().getName() + " выложил в комнату " + this.getBackpackList().get(i).getName() +
-                    " стоимостью " + this.getBackpackList().get(i).getPrice() + " и весом " + this.getBackpackList().get(i).getWeight());
-            this.getBackpackList().remove(this.getBackpackList().get(i));
+    private void addApartmentList() {
+        while (!(getBackpackHost().isEmpty())) {
+            for (int i = getBackpackHost().size() - 1; i >= 0; i--) {
+                Apartment.addList(getBackpackHost().get(i));
+                System.out.println(Thread.currentThread().getName() +
+                        " выложил в комнату " + getBackpackHost().get(i).getName() +
+                        " стоимостью " + getBackpackHost().get(i).getPrice() +
+                        " и весом " + getBackpackHost().get(i).getWeight());
+                getBackpackHost().remove(getBackpackHost().get(i));
+            }
         }
 
     }
 
-    public synchronized void notifyJob() {
-        Apartment.joy = true;
-        notify();
-    }
 }
 
