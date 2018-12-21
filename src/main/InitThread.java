@@ -8,7 +8,7 @@ public class InitThread {
     private static int[] weightItem = {10, 20, 15, 15, 45, 40, 10, 15, 40, 70, 50};
     private static int[] priceItem = {20, 15, 15, 40, 90, 20, 43, 15, 90, 80, 50};
     private static int[] sizeBackpack = {10, 20, 90, 100, 10, 30, 50, 20, 15, 20, 40, 90};
-    private static int[] numItem = {5, 10, 3, 8, 7, 9, 6, 11, 15, 2, 1, 4};
+    private static int[] numItem = {5, 5, 3, 8, 7, 9, 6, 5, 6, 2, 1, 4};
     private static List<Host> hostList = new ArrayList<>();
     private static List<Thief> thiefList = new ArrayList<>();
 

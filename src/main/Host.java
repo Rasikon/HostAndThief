@@ -18,12 +18,12 @@ public class Host extends Thread {
 
     @Override
     public void run() {
-        addApartmentList();
-        Apartment.host.countDown();
+            addApartmentList();
+            thiefJob();
+
     }
 
     private void addApartmentList() {
-        while (!(getBackpackHost().isEmpty())) {
             for (int i = getBackpackHost().size() - 1; i >= 0; i--) {
                 Apartment.addList(getBackpackHost().get(i));
                 System.out.println(Thread.currentThread().getName() +
@@ -34,7 +34,15 @@ public class Host extends Thread {
             }
         }
 
+
+    public synchronized void thiefJob(){
+        synchronized (Apartment.apartament){
+            Apartment.Bool = true;
+            notify();
+        }
     }
 
-}
+    }
+
+
 

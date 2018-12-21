@@ -16,13 +16,17 @@ public class Thief extends Thread {
 
     @Override
     public void run() {
-        try {
-            Apartment.host.await();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+        synchronized (Apartment.apartament){
+            while(!Apartment.Bool){
+                try {
+                    Apartment.apartament.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+            addBackpackThief();
         }
-        addBackpackThief();
-        System.out.println(getBackpackThief());
+
     }
 
     private void addBackpackThief() {
@@ -36,8 +40,8 @@ public class Thief extends Thread {
                                 " стоимостью " + Apartment.getApartmentList().get(i).getPrice() +
                                 " и весом " + Apartment.getApartmentList().get(i).getWeight());
                         Apartment.delList(Apartment.getApartmentList().get(i));
-                      mas --;
                     }
+                      mas --;
                 }
                 }
             }

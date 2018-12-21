@@ -4,8 +4,10 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 
 public class Apartment {
-    private static List<Item> apartmentList = Collections.synchronizedList(new ArrayList<>());
+    public static List<Item> apartmentList = Collections.synchronizedList(new ArrayList<>());
     public static CountDownLatch host;
+    public static final Object apartament = new Object();
+    public static boolean Bool = false;
 
     public static List<Item> getApartmentList() {
         return apartmentList;
