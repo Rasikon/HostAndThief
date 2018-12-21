@@ -29,7 +29,8 @@ public class Thief extends Thread {
 
     }
 
-    private void addBackpackThief() {
+
+    private synchronized void addBackpackThief() {
         int mas = maxMass;
         synchronized (Thief.class) {
                 for (int i = Apartment.getApartmentList().size()-1; i >= 0; i--) {
