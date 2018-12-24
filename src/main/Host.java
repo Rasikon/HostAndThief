@@ -18,10 +18,10 @@ public class Host extends Thread {
 
     @Override
     public void run() {
-        synchronized (this) {
+        synchronized (Apartment.apartment) {
             while (!Apartment.doOpenHost()) {
                 try {
-                    this.wait();
+                    Apartment.apartment.wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -30,9 +30,9 @@ public class Host extends Thread {
             addApartmentList();
         }
         Apartment.doClose();
-        synchronized (Thief.class){
-            Thief.class.notifyAll();
-        }
+//        synchronized (Apartment.apartment){
+//            Apartment.apartment.notifyAll();
+//        }
     }
 
     private void addApartmentList() {

@@ -16,10 +16,10 @@ public class Thief extends Thread {
 
     @Override
     public void run() {
-        synchronized (Thief.class) {
+        synchronized (this) {
             while (!Apartment.doOpenThief()) {
                 try {
-                    Thief.class.wait();
+                    this.wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -28,8 +28,8 @@ public class Thief extends Thread {
             addBackpackThief();
         }
         Apartment.doClose();
-        synchronized (Host.class){
-            Host.class.notifyAll();
+        synchronized (Apartment.apartment){
+            Apartment.apartment.notifyAll();
         }
     }
 
@@ -45,7 +45,7 @@ public class Thief extends Thread {
                             " забрал из комнаты " + Apartment.getApartmentList().get(i).getName() +
                             " стоимостью " + Apartment.getApartmentList().get(i).getPrice() +
                             " и весом " + Apartment.getApartmentList().get(i).getWeight());
-                    Apartment.delList(Apartment.getApartmentList().get(i));
+//                    Apartment.delList(Apartment.getApartmentList().get(i));
                 }
                 mas--;
             }
