@@ -18,9 +18,20 @@ public class Host extends Thread {
 
     @Override
     public void run() {
+        synchronized (this) {
+            while (!Apartment.doOpenHost()) {
+                try {
+                    this.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
             addApartmentList();
-            thiefJob();
-
+        }
+        Apartment.doClose();
+        synchronized (Apartment.apartment){
+            Apartment.apartment.notifyAll();
+        }
     }
 
     private void addApartmentList() {
@@ -37,12 +48,12 @@ public class Host extends Thread {
 
     }
 
-    public synchronized void thiefJob(){
-        synchronized (Apartment.apartament){
-            Apartment.Bool = true;
-            Apartment.apartament.notify();
-        }
-    }
+//    public void thiefJob(){
+//        synchronized (Apartment.apartament){
+//            Apartment.Bool = true;
+//            Apartment.apartament.notify();
+//        }
+//    }
 
     }
 

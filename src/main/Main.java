@@ -12,5 +12,6 @@ public class Main {
         InitThread.thiefInit(Integer.parseInt(reader.readLine()));
         InitThread.startThread();
 
+
     }
 }

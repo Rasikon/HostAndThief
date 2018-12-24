@@ -14,7 +14,6 @@ public class InitThread {
 
 
     public static void hostInit(int host) {
-        Apartment.host = new CountDownLatch(host);
         for (int i = 0; i < host; i++) {
             int allItems = InitThread.numItem[(int) (Math.random() * 11)];
             hostList.add(new Host(i, new ArrayList<>()));
