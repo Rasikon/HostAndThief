@@ -16,14 +16,15 @@ public class Thief extends Thread {
 
     @Override
     public void run() {
-        synchronized (Apartment.apartment) {
-            while (!Apartment.doOpenHost()) {
+        synchronized (Thief.class) {
+            while (!Apartment.doOpenThief()) {
                 try {
-                    Apartment.apartment.wait();
+                    Thief.class.wait();
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
+            Apartment.incThief();
             addBackpackThief();
         }
         Apartment.doClose();
@@ -31,6 +32,7 @@ public class Thief extends Thread {
             Host.class.notifyAll();
         }
     }
+
 
 
     private synchronized void addBackpackThief() {

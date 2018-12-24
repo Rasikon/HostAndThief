@@ -25,16 +25,15 @@ public class Apartment {
 
 
     public synchronized static boolean doOpenHost() {
-        if (Thread.currentThread().getClass().getName().equals("Host") && sumThief==0){
-            sumPeople++;
-            sumHost++;
-          return true;
-        } else if (Thread.currentThread().getClass().getName().equals("Thief") && sumPeople==0) {
-            sumPeople++;
-            sumThief++;
+        if (sumThief == 0) {
             return true;
         } else return false;
+    }
 
+    public synchronized static boolean doOpenThief() {
+        if (sumHost == 0 && sumPeople == 0) {
+            return true;
+        } else return false;
     }
 
     public synchronized static void doClose(){
@@ -45,6 +44,16 @@ public class Apartment {
             sumHost--;
             sumPeople--;
         }
+    }
+
+    public synchronized static void incHost(){
+        sumHost++;
+        sumPeople++;
+    }
+
+    public synchronized static void incThief(){
+        sumThief++;
+        sumPeople++;
     }
 
 }

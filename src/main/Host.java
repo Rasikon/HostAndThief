@@ -26,11 +26,12 @@ public class Host extends Thread {
                     e.printStackTrace();
                 }
             }
+            Apartment.incHost();
             addApartmentList();
         }
         Apartment.doClose();
-        synchronized (Apartment.apartment){
-            Apartment.apartment.notifyAll();
+        synchronized (Thief.class){
+            Thief.class.notifyAll();
         }
     }
 
