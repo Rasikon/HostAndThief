@@ -1,4 +1,4 @@
-public class Item {
+public class Item implements Comparable<Item> {
     private String name;
     private int weight;
     private int price;
@@ -29,5 +29,10 @@ public class Item {
                 ", weight=" + weight +
                 ", price=" + price +
                 '}';
+    }
+
+    @Override
+    public int compareTo(Item o) {
+        return (this.getPrice()-o.getPrice());
     }
 }

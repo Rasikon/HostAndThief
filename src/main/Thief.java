@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Thief extends Thread {
@@ -25,6 +27,7 @@ public class Thief extends Thread {
 
 
     private synchronized void addBackpackThief() {
+        Collections.sort(apartment.getApartmentList());
             for (int i = apartment.getApartmentList().size() - 1; i >= 0; i--) {
                 if(maxMass>apartment.getApartmentList().get(i).getWeight()) {
                     maxMass = maxMass-apartment.getApartmentList().get(i).getWeight();
