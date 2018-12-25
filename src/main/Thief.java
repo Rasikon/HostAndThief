@@ -20,9 +20,6 @@ public class Thief extends Thread {
             apartment.doOpenThief();
             addBackpackThief();
             apartment.doClose();
-        synchronized (apartment) {
-            apartment.notifyAll();
-        }
     }
 
 

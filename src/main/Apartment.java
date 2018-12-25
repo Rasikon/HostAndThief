@@ -64,9 +64,11 @@ public class Apartment {
         if (Thread.currentThread().getClass().getName().equals("Thief")){
             sumThief--;
             sumPeople--;
+            notifyAll();
         }else if (Thread.currentThread().getClass().getName().equals("Host")){
             sumHost--;
             sumPeople--;
+            notifyAll();
         }
     }
 

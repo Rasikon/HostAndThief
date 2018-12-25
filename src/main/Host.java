@@ -22,9 +22,6 @@ public class Host extends Thread {
             apartment.doOpenHost();
             addApartmentList();
             apartment.doClose();
-        synchronized (apartment) {
-            apartment.notifyAll();
-        }
     }
 
     private void addApartmentList() {
