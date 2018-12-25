@@ -5,38 +5,62 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Apartment {
+    private static Apartment instance;
     public static List<Item> apartmentList = Collections.synchronizedList(new ArrayList<>());
-    public static final Object apartment = new Object();
     public static volatile int sumHost =0;
     public static volatile int sumThief = 0;
     public static volatile int sumPeople = 0;
 
-    public static List<Item> getApartmentList() {
+    private Apartment() {
+
+    }
+
+    public static Apartment getInstance() {
+        if(instance == null){
+            instance = new Apartment();
+        }
+        return instance;
+    }
+
+    public List<Item> getApartmentList() {
         return apartmentList;
     }
 
-    public static void addList(Item item) {
+    public void addList(Item item) {
         apartmentList.add(item);
     }
 
-    public static void delList(Item item) {
+    public  void delList(Item item) {
         apartmentList.remove(item);
     }
 
 
-    public synchronized static boolean doOpenHost() {
-        if (sumThief == 0) {
-            return true;
-        } else return false;
+    public synchronized void doOpenHost() {
+        while (sumThief > 0 ) {
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        sumHost++;
+        sumPeople++;
     }
 
-    public synchronized static boolean doOpenThief() {
-        if (sumHost == 0 && sumPeople == 0) {
-            return true;
-        } else return false;
+    public synchronized void doOpenThief() {
+        while (sumPeople > 0) {
+            try {
+                this.wait();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        sumThief++;
+        sumPeople++;
     }
 
-    public synchronized static void doClose(){
+
+    public synchronized void doClose(){
         if (Thread.currentThread().getClass().getName().equals("Thief")){
             sumThief--;
             sumPeople--;
@@ -46,15 +70,6 @@ public class Apartment {
         }
     }
 
-    public synchronized static void incHost(){
-        sumHost++;
-        sumPeople++;
-    }
-
-    public synchronized static void incThief(){
-        sumThief++;
-        sumPeople++;
-    }
 
 }
 

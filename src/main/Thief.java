@@ -3,6 +3,7 @@ import java.util.List;
 
 public class Thief extends Thread {
     private List<Item> backpackThief = new ArrayList<>();
+    private final Apartment apartment =Apartment.getInstance();
     private int maxMass;
 
     public Thief(int name, int maxMass) {
@@ -16,20 +17,11 @@ public class Thief extends Thread {
 
     @Override
     public void run() {
-        synchronized (this) {
-            while (!Apartment.doOpenThief()) {
-                try {
-                    this.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            Apartment.incThief();
+            apartment.doOpenThief();
             addBackpackThief();
-        }
-        Apartment.doClose();
-        synchronized (Apartment.apartment){
-            Apartment.apartment.notifyAll();
+            apartment.doClose();
+        synchronized (apartment) {
+            apartment.notifyAll();
         }
     }
 
@@ -37,20 +29,18 @@ public class Thief extends Thread {
 
     private synchronized void addBackpackThief() {
         int mas = maxMass;
-        synchronized (Thief.class) {
-            for (int i = Apartment.getApartmentList().size() - 1; i >= 0; i--) {
+            for (int i = apartment.getApartmentList().size() - 1; i >= 0; i--) {
                 if (mas > 0) {
-                    getBackpackThief().add(Apartment.getApartmentList().get(i));
+                    getBackpackThief().add(apartment.getApartmentList().get(i));
                     System.out.println(Thread.currentThread().getName() +
-                            " забрал из комнаты " + Apartment.getApartmentList().get(i).getName() +
-                            " стоимостью " + Apartment.getApartmentList().get(i).getPrice() +
-                            " и весом " + Apartment.getApartmentList().get(i).getWeight());
-//                    Apartment.delList(Apartment.getApartmentList().get(i));
+                            " забрал из комнаты " + apartment.getApartmentList().get(i).getName() +
+                            " стоимостью " + apartment.getApartmentList().get(i).getPrice() +
+                            " и весом " + apartment.getApartmentList().get(i).getWeight());
+//                    apartment.delList(Apartment.getApartmentList().get(i));
                 }
                 mas--;
             }
 
-        }
     }
 }
 

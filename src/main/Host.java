@@ -2,6 +2,7 @@ import java.util.List;
 
 public class Host extends Thread {
     private List<Item> backpackHost;
+    private final Apartment apartment =Apartment.getInstance();
 
     public Host(int name, List<Item> backpackHost) {
         this.setName(String.valueOf(name));
@@ -18,27 +19,18 @@ public class Host extends Thread {
 
     @Override
     public void run() {
-        synchronized (Apartment.apartment) {
-            while (!Apartment.doOpenHost()) {
-                try {
-                    Apartment.apartment.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            Apartment.incHost();
+            apartment.doOpenHost();
             addApartmentList();
+            apartment.doClose();
+        synchronized (apartment) {
+            apartment.notifyAll();
         }
-        Apartment.doClose();
-//        synchronized (Apartment.apartment){
-//            Apartment.apartment.notifyAll();
-//        }
     }
 
     private void addApartmentList() {
         while (!(getBackpackHost().isEmpty())) {
             for (int i = getBackpackHost().size() - 1; i >= 0; i--) {
-                Apartment.addList(getBackpackHost().get(i));
+                apartment.addList(getBackpackHost().get(i));
                 System.out.println(Thread.currentThread().getName() +
                         " выложил в комнату " + getBackpackHost().get(i).getName() +
                         " стоимостью " + getBackpackHost().get(i).getPrice() +
@@ -49,14 +41,7 @@ public class Host extends Thread {
 
     }
 
-//    public void thiefJob(){
-//        synchronized (Apartment.apartament){
-//            Apartment.Bool = true;
-//            Apartment.apartament.notify();
-//        }
-//    }
-
-    }
+}
 
 
 
