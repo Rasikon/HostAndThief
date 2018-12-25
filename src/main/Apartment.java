@@ -38,7 +38,7 @@ public class Apartment {
     public synchronized void doOpenHost() {
         while (sumThief > 0 ) {
             try {
-                this.wait();
+                wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -50,7 +50,7 @@ public class Apartment {
     public synchronized void doOpenThief() {
         while (sumPeople > 0) {
             try {
-                this.wait();
+                wait();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
