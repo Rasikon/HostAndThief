@@ -27,7 +27,10 @@ public class Thief extends Thread {
 
 
     private synchronized void addBackpackThief() {
-        Collections.sort(apartment.getApartmentList());
+        if(apartment.getApartmentList().isEmpty()){
+            System.out.println("В комнате пусто");
+        }
+        Collections.sort(apartment.getApartmentList(),new Item.CompByPrice());
             for (int i = apartment.getApartmentList().size() - 1; i >= 0; i--) {
                 if(maxMass>apartment.getApartmentList().get(i).getWeight()) {
                     maxMass = maxMass-apartment.getApartmentList().get(i).getWeight();
@@ -37,7 +40,7 @@ public class Thief extends Thread {
                             " стоимостью " + apartment.getApartmentList().get(i).getPrice() +
                             " и весом " + apartment.getApartmentList().get(i).getWeight());
                     apartment.delList(apartment.getApartmentList().get(i));
-                }
+                }else System.out.println("Вещь не помещается");
             }
         }
 }
