@@ -32,7 +32,7 @@ public class Item {
                 ", price=" + price +
                 '}';
     }
-    
+
     public static class CompByPrice implements Comparator<Item>{
 
         @Override

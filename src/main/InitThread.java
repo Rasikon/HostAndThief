@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
 public class InitThread {
@@ -35,13 +32,13 @@ public class InitThread {
     }
 
     public static void startThread() {
-        List<Thread> threadList = new ArrayList<>(hostList);
+        List<Thread> threadList = new ArrayList<>();
+        threadList.addAll(hostList);
         threadList.addAll(thiefList);
+        Collections.shuffle(threadList);
 
-        for(int i=0;i<threadList.size();i++){
-            int randomThread = (int) (Math.random() * threadList.size());
-            threadList.get(randomThread).start();
-            threadList.remove(randomThread);
+        for(Thread thread:threadList){
+            thread.start();
         }
     }
 }
