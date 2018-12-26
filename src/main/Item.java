@@ -32,12 +32,7 @@ public class Item {
                 ", price=" + price +
                 '}';
     }
-
-//    @Override
-//    public int compareTo(Item o) {
-//        return (this.getPrice()-o.getPrice());
-//    }
-
+    
     public static class CompByPrice implements Comparator<Item>{
 
         @Override
