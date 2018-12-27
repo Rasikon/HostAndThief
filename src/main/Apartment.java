@@ -7,7 +7,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Apartment {
     private static Apartment instance;
     public static List<Item> apartmentList = Collections.synchronizedList(new ArrayList<>());
-    public static volatile int sumHost =0;
     public static volatile int sumThief = 0;
     public static volatile int sumPeople = 0;
 
@@ -43,7 +42,6 @@ public class Apartment {
                 e.printStackTrace();
             }
         }
-        sumHost++;
         sumPeople++;
     }
 
@@ -66,7 +64,6 @@ public class Apartment {
             sumPeople--;
             notifyAll();
         }else if (Thread.currentThread().getClass().getName().equals("Host")){
-            sumHost--;
             sumPeople--;
             notifyAll();
         }

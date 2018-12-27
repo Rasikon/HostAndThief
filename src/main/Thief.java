@@ -26,7 +26,7 @@ public class Thief extends Thread {
 
 
 
-    private synchronized void addBackpackThief() {
+    private void addBackpackThief() {
         if(apartment.getApartmentList().isEmpty()){
             System.out.println("В комнате пусто");
         }
@@ -40,7 +40,8 @@ public class Thief extends Thread {
                             " стоимостью " + apartment.getApartmentList().get(i).getPrice() +
                             " и весом " + apartment.getApartmentList().get(i).getWeight());
                     apartment.delList(apartment.getApartmentList().get(i));
-                }else System.out.println("Вещь не помещается");
+                }
+//                else System.out.println("Вещь не помещается");
             }
         }
 }
