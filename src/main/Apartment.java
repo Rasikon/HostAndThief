@@ -1,75 +1,71 @@
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public class Apartment {
+class Apartment {
     private static Apartment instance;
-    public static List<Item> apartmentList = Collections.synchronizedList(new ArrayList<>());
-    public static volatile int sumThief = 0;
-    public static volatile int sumPeople = 0;
+    private List<Item> apartmentList = Collections.synchronizedList(new ArrayList<>());
+    private int thiefCount = 0;
+    private int peopleCount = 0;
 
-    private Apartment() {
-
-    }
-
-    public static Apartment getInstance() {
-        if(instance == null){
+    static Apartment getInstance() {
+        if (instance == null) {
             instance = new Apartment();
         }
         return instance;
     }
 
-    public List<Item> getApartmentList() {
+    private Apartment() {
+
+    }
+
+    List<Item> getApartmentList() {
         return apartmentList;
     }
 
-    public void addList(Item item) {
+    void addItemApartment(Item item) {
         apartmentList.add(item);
     }
 
-    public  void delList(Item item) {
+    void delItemApartment(Item item) {
         apartmentList.remove(item);
     }
 
-
-    public synchronized void doOpenHost() {
-        while (sumThief > 0 ) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+    synchronized void doOpenApartment() {
+        String threadName = Thread.currentThread().getClass().getName();
+        if (threadName.equals("Host")) {
+            while (thiefCount > 0) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        }
-        sumPeople++;
-    }
-
-    public synchronized void doOpenThief() {
-        while (sumPeople > 0) {
-            try {
-                wait();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+            peopleCount++;
+        } else if (threadName.equals("Thief")) {
+            while (peopleCount > 0) {
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        }
-        sumThief++;
-        sumPeople++;
-    }
-
-
-    public synchronized void doClose(){
-        if (Thread.currentThread().getClass().getName().equals("Thief")){
-            sumThief--;
-            sumPeople--;
-            notifyAll();
-        }else if (Thread.currentThread().getClass().getName().equals("Host")){
-            sumPeople--;
-            notifyAll();
+            thiefCount++;
+            peopleCount++;
         }
     }
 
-
+    synchronized void doCloseApartment() {
+        String threadName = Thread.currentThread().getClass().getName();
+        if (threadName.equals("Thief")) {
+            thiefCount--;
+            peopleCount--;
+            notifyAll();
+        } else if (threadName.equals("Host")) {
+            peopleCount--;
+            notifyAll();
+        }
+    }
 }
 
 
