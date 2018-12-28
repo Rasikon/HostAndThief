@@ -1,15 +1,7 @@
-import java.util.ArrayList;
-import java.util.List;
+public class Thief extends Person implements ThiefInterface {
 
-public class Thief extends Thread {
-    private List<Item> backpackThief;
-    private final Apartment apartment = Apartment.getInstance();
-    private int maxMass;
-
-    Thief(int name, int maxMass) {
-        this.setName(String.valueOf(name));
-        this.maxMass = maxMass;
-        backpackThief = new ArrayList<>();
+    Thief(String name, int maxMass) {
+        super(name, maxMass);
     }
 
     @Override
@@ -19,7 +11,7 @@ public class Thief extends Thread {
         apartment.doCloseApartment();
     }
 
-    private void addItemToBackpack() {
+    public void addItemToBackpack() {
         if (apartment.getApartmentList().isEmpty()) {
             System.out.println("В комнате пусто");
         }
@@ -28,7 +20,7 @@ public class Thief extends Thread {
             Item apartmentItem = apartment.getApartmentList().get(i);
             if (maxMass > apartmentItem.getWeight()) {
                 maxMass = maxMass - apartmentItem.getWeight();
-                backpackThief.add(apartmentItem);
+                addItemBackpack(apartmentItem);
                 System.out.println(Thread.currentThread().getName() +
                         " забрал из комнаты " + apartmentItem.getName() +
                         " стоимостью " + apartmentItem.getPrice() +
@@ -37,6 +29,7 @@ public class Thief extends Thread {
             }
         }
     }
+
 }
 
 
