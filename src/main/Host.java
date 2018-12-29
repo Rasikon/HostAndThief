@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+
 public class Host extends Person implements HostInterface {
 
     Host(String name) {
@@ -14,7 +16,7 @@ public class Host extends Person implements HostInterface {
     }
 
     public void addItemToApartment() {
-        Item backpackItem = backpack.get(backpack.size() - 1);
+        Item backpackItem = ((LinkedList<Item>) backpack).getLast();
         apartment.addItemApartment(backpackItem);
         System.out.println(Thread.currentThread().getName() +
                 " выложил в комнату " + backpackItem.getName() +
@@ -22,7 +24,6 @@ public class Host extends Person implements HostInterface {
                 " и весом " + backpackItem.getWeight());
         backpack.remove(backpackItem);
     }
-
 }
 
 
